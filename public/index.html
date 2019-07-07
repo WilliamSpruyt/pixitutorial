@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Make a sprite from an image</title>
+<body>
+<script src="../pixi/pixi.min.js"></script>
+<script>
+
+//Create a Pixi Application
+let app = new PIXI.Application({ 
+    width:800, 
+    height: 400,                       
+    antialiasing: true, 
+    transparent: false, 
+    resolution: 1
+  }
+);
+
+//Add the canvas that Pixi automatically created for you to the HTML document
+document.body.appendChild(app.view);
+
+//load an image and run the `setup` function when it's done
+PIXI.loader
+  .add("images/berniewithalph1000px.png")
+  .load(setup);
+
+//This `setup` function will run when the image has loaded
+function setup() {
+
+  //Create the cat sprite
+  let bernie = new PIXI.Sprite(PIXI.loader.resources["images/berniewithalph1000px.png"].texture);
+  
+  //You can also create the `cat` sprite from the texture, like this:
+  //let cat = new PIXI.Sprite(PIXI.TextureCache["images/cat.png"]);
+
+  //Add the cat to the stage
+  app.stage.addChild(bernie);
+  app.renderer.backgroundColor = 0x061639;
+  //If you ever need to, here's how you can clean out WebGL's GPU
+  //memory manually
+  /*
+  Object.keys(TextureCache).forEach(function(texture) {
+    TextureCache[texture].destroy(true);
+  });
+  */
+  app.renderer.view.style.position = "absolute";
+app.renderer.view.style.display = "block";
+app.renderer.autoResize = true;
+app.renderer.resize(window.innerWidth, window.innerHeight);
+bernie.width = 1000;
+bernie.height = 1000;
+bernie.anchor.x = 0.5;
+bernie.anchor.y = 0.5;
+bernie.x = window.innerWidth/2;
+bernie.y = window.innerHeight/2;
+bernie.rotation = 0.5;
+app.ticker.add(delta => gameLoop(delta));
+function gameLoop(delta){
+
+//Move the cat 1 pixel 
+bernie.rotation +=0.2;
+bernie.width*=0.999;
+bernie.height =bernie.width*Math.sin(bernie.width);
+}
+}
+
+</script>
+</body>
